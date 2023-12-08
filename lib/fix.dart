@@ -19,7 +19,45 @@ class FixTab extends StatelessWidget {
       children: [
         Row(
           children: [
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 2; i++)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.red,
+                  height: 40,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: Center(
+                    child: Text(
+                      '$i',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        Row(
+          children: [
+            for (var i = 2; i < 4; i++)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.red,
+                  height: 40,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: Center(
+                    child: Text(
+                      '$i',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        Row(
+          children: [
+            for (var i = 4; i < 5; i++)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -90,7 +128,7 @@ class FixTab extends StatelessWidget {
 }
 
 class FixProvider extends ChangeNotifier {
-  int counter = 0;
+  int counter = 3;
 
   void increaseCounter() {
     counter++;
