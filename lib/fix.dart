@@ -1,10 +1,11 @@
 import 'package:assignment_test/model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:ui' show lerpDouble;
 
 class FixTab extends StatelessWidget {
   FixTab({Key? key}) : super(key: key);
-  Person? person;
+  final Person person = Person(25, 180);
 
   //Errors:
   // Null Safety and Initialization
@@ -26,10 +27,11 @@ class FixTab extends StatelessWidget {
                   height: 40,
                   width: MediaQuery.of(context).size.width * 0.4,
                   child: Center(
-                      child: Text(
-                    '$i',
-                    style: const TextStyle(color: Colors.white),
-                  )),
+                    child: Text(
+                      '$i',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
               ),
           ],
@@ -39,52 +41,59 @@ class FixTab extends StatelessWidget {
           color: Colors.black,
         ),
         Provider<FixProvider>(
-    create: (context) => FixProvider(),
-    builder: (context, _) {
-       return Column(
-        children: [
-          SizedBox(
-            width: 100,
-            height: 100,
-            child: Center(
-              child: Text(
-                'Counter: ${context.read<FixProvider>().counter!.toString()}',
-              ),
-            ),
-          ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      context.read<FixProvider>().increaseCounter();
+          create: (context) => FixProvider(),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 100,
+                height: 100,
+                child: Center(
+                  child: Consumer<FixProvider>(
+                    builder: (context, fixProvider, _) {
+                      return Text(
+                        'Counter: ${fixProvider.counter.toString()}',
+                      );
                     },
-                    child: const Text('Increase Counter'),
-                  )
-                ],
-              );
-            },
-            ),
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  context.read<FixProvider>().increaseCounter();
+                },
+                child: const Text('Increase Counter'),
+              ),
+            ],
+          ),
+        ),
         const Divider(
           thickness: 5,
           color: Colors.black,
         ),
-        Text('Ideal weight: ${person?.getIdealWeight("male") ?? 'N/A'}'),
-
-  ElevatedButton(
-    onPressed: () {
-      person = Person(25, 180);
-      person?.getIdealWeight("male");
-    },
-    child: const Text('Calculate weight'),
-  ),
+        Text(
+            'Ideal weight: ${person.getIdealWeight("male")?.toString() ?? 'N/A'}'),
+        ElevatedButton(
+          onPressed: () {
+            num idealWeight = person.getIdealWeight("male") ?? 0;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Ideal weight: $idealWeight'),
+                backgroundColor: Colors.blue,
+              ),
+            );
+          },
+          child: const Text('Calculate weight'),
+        ),
       ],
     );
   }
 }
 
 class FixProvider extends ChangeNotifier {
-  int? counter;
+  int counter = 0;
 
-  increaseCounter() {
-    counter = counter! + 1;
+  void increaseCounter() {
+    counter++;
     notifyListeners();
   }
 }
